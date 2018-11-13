@@ -1,0 +1,59 @@
+BootStrap: localimage
+From: centos7.sif
+
+%labels
+    MAINTAINER "Martin Aumüller" <aumueller@hlrs.de>
+
+%runscript
+    echo "Use this container a foundation for building COVISE"
+
+
+%files
+    osg-find-coin.diff /tmp/osg-find-coin.diff
+
+%post
+    . /etc/buildenv.sh
+
+    yum install -y nasm
+
+    export PREFIX=/usr
+
+    mkdir -p /build && cd /build
+    git clone --recursive git://git.ffmpeg.org/ffmpeg.git -b release/4.0
+    cd ffmpeg && mkdir -p build && cd build \
+        && ../configure --enable-shared --prefix=$PREFIX --libdir=$PREFIX/lib64 \
+        && make -j $(getconf _NPROCESSORS_ONLN) install \
+        && cd / && rm -rf /build/ffmpeg
+
+    mkdir -p /build && cd /build \
+        && git clone --recursive https://github.com/vrpn/vrpn.git \
+        && cd vrpn && mkdir build && cd build \
+        && cmake -GNinja .. -DCMAKE_INSTALL_PREFIX=$PREFIX -DCMAKE_BUILD_TYPE=Release -DLIB_SUFFIX=64 \
+        && cmake --build . --target install \
+        && cd / && rm -rf /build/vrpn
+
+    mkdir -p /build && cd /build \
+       && git clone --recursive https://github.com/Kitware/VTK.git -b release \
+       && cd VTK && mkdir -p build \
+       && cd build \
+       && cmake .. -DCMAKE_INSTALL_PREFIX=$PREFIX -G Ninja \
+       && cmake --build . --target install \
+       && cd / && rm -rf /build/VTK
+
+    mkdir -p /build && cd /build \
+       && git clone --recursive git://github.com/openscenegraph/osg.git -b OpenSceneGraph-3.6 \
+       && cd osg && mkdir -p build \
+       && git apply /tmp/osg-find-coin.diff \
+       && rm /tmp/osg-find-coin.diff \
+       && cd build \
+       && cmake .. -DCMAKE_INSTALL_PREFIX=$PREFIX -G Ninja \
+       && cmake --build . --target install \
+       && cd / && rm -rf /build/osg
+
+    . /etc/cleanup.sh
+
+    echo "export PREFIX=$PREFIX" >> /etc/buildenv.sh
+
+%environment
+    . /etc/buildenv.sh
+

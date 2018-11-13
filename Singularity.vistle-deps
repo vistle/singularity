@@ -1,0 +1,46 @@
+BootStrap: localimage
+From: covise.sif
+
+%labels
+    MAINTAINER "Martin Aumüller" <aumueller@hlrs.de>
+
+%runscript
+    echo "Use this container a foundation for building COVISE"
+
+%files
+    embree-usr-symlink-v2.17.x.diff /tmp/embree-usr-symlink.diff
+
+%post
+    . /etc/buildenv.sh
+
+    yum install -y libzstd-devel tinyxml2-devel
+
+    mkdir -p /build && cd /build \
+        && git clone https://github.com/lz4/lz4.git \
+        && cd lz4 \
+        && make -j $(getconf _NPROCESSORS_ONLN) install PREFIX=$PREFIX LIBDIR=$PREFIX/lib64 \
+        && cd / && rm -rf /build/lz4
+
+    # install ispc - prerequisite for embree
+    cd /tmp \
+        && wget -q http://sourceforge.net/projects/ispcmirror/files/v1.9.2/ispc-v1.9.2-linux.tar.gz/download \
+        && tar -C /usr/bin -x -f /tmp/download --strip-components=1 ispc-v1.9.2-linux/ispc \
+        && rm download
+
+    # Embree 2
+    mkdir -p /build && cd /build \
+        && git clone git://github.com/embree/embree.git \
+        && cd embree \
+        && git checkout v2.17.6 \
+        && git apply /tmp/embree-usr-symlink.diff \
+        && rm /tmp/embree-usr-symlink.diff \
+        && mkdir -p build \
+        && cd build && cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PREFIX -DENABLE_TUTORIALS=OFF -DEMBREE_TUTORIALS=OFF .. \
+        && cmake --build . --target install \
+        && cd / && rm -rf /build/embree
+
+    . /etc/cleanup.sh
+
+
+%environment
+    . /etc/env.sh

@@ -1,0 +1,30 @@
+From cf175dd1ff8a2ee45af47713c6ab06038f0ad23e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Martin=20Aum=C3=BCller?= <aumuell@reserv.at>
+Date: Tue, 13 Nov 2018 10:41:08 +0100
+Subject: [PATCH] find Coin on centos 7
+
+---
+ CMakeModules/FindInventor.cmake | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/CMakeModules/FindInventor.cmake b/CMakeModules/FindInventor.cmake
+index 0c1fdfdfa..47cb89103 100644
+--- a/CMakeModules/FindInventor.cmake
++++ b/CMakeModules/FindInventor.cmake
+@@ -27,9 +27,13 @@
+ execute_process (COMMAND coin-config --prefix
+                  OUTPUT_VARIABLE COIN_PREFIX
+                  OUTPUT_STRIP_TRAILING_WHITESPACE)
++execute_process (COMMAND coin-config --includedir
++                 OUTPUT_VARIABLE COIN_INCLUDE_DIR
++                 OUTPUT_STRIP_TRAILING_WHITESPACE)
+ 
+ # try to find Inventor includes (priority paths)
+ FIND_PATH(INVENTOR_INCLUDE_DIR Inventor/So.h
++    ${COIN_INCLUDE_DIR}
+     ${COIN_PREFIX}/include
+     $ENV{COINDIR}/include
+     NO_DEFAULT_PATH
+-- 
+2.12.2
+
