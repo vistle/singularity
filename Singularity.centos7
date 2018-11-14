@@ -46,7 +46,20 @@ From: centos:latest
     yum install -y devtoolset-4-toolchain devtoolset-4-binutils devtoolset-4-libstdc++-devel devtoolset-4-gcc-c++ devtoolset-4-runtime devtoolset-4-gcc
     echo ". /opt/rh/devtoolset-4/enable" >> /etc/buildenv.sh
 
-    echo ". /etc/mpi.sh" > /etc/env.sh
+    echo "unset PATH" > /etc/env.sh
+    echo "unset LD_LIBRARY_PATH" > /etc/env.sh
+    echo "unset XDG_CURRENT_DESKTOP" >> /etc/env.sh
+    echo "unset XDG_DATA_DIRS" >> /etc/env.sh
+    echo "unset XDG_RUNTIME_DIR" >> /etc/env.sh
+    echo "unset XDG_SEAT_PATH" >> /etc/env.sh
+    echo "unset XDG_SEAT" >> /etc/env.sh
+    echo "unset XDG_SESSION_CLASS" >> /etc/env.sh
+    echo "unset XDG_SESSION_DESKTOP" >> /etc/env.sh
+    echo "unset XDG_SESSION_ID" >> /etc/env.sh
+    echo "unset XDG_SESSION_PATH" >> /etc/env.sh
+    echo "unset XDG_SESSION_TYPE" >> /etc/env.sh
+    echo "unset XDG_VTNR" >> /etc/env.sh
+    echo ". /etc/mpi.sh" >> /etc/env.sh
 
     echo "cd /" >> /etc/cleanup.sh
     #echo "rm -rf /build" >> /etc/cleanup.sh
