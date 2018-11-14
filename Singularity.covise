@@ -24,6 +24,8 @@ From: covise-deps.sif
 
     echo "export ARCHSUFFIX=${ARCHSUFFIX}" >> /etc/env.sh
     echo "export COVISEDIR=${PREFIX}" >> /etc/env.sh
+    echo "export LD_LIBRARY_PATH=\$COVISEDIR/\$ARCHSUFFIX/lib:\$LD_LIBRARY_PATH" >> /etc/env.sh
+
     echo "export COVISEDIR=${COVISEDIR}" >> /etc/buildenv.sh
     echo "export COVISEDESTDIR=${COVISEDESTDIR}" >> /etc/buildenv.sh
 
