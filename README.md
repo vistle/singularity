@@ -31,4 +31,4 @@ Editing your ``run-singularity`` script will allow to change default parameters.
 [covise]:      https://www.hlrs.de/covise
 [cover]:       https://www.hlrs.de/opencover
 [vistle]:      https://www.hlrs.de/vistle
-[centos]:      https:/www.centos.org
+[centos]:      https://www.centos.org
