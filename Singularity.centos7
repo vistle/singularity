@@ -65,5 +65,8 @@ From: centos:latest
     #echo "rm -rf /build" >> /etc/cleanup.sh
     echo "yum clean all" >> /etc/cleanup.sh
 
+    echo -n '0123456789ABCDEF0123456789ABCDEF' > /etc/machine-id
+
+
 %environment
     source /etc/env.sh
