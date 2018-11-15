@@ -5,7 +5,6 @@ From: covise-deps.sif
     MAINTAINER "Martin Aumüller" <aumueller@hlrs.de>
 
 %runscript
-    . /etc/env.sh
     $COVISEDIR/bin/covise "$@"
 
 %post
