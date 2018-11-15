@@ -20,7 +20,7 @@ From: vistle-deps.sif
         && cd /build/vistle \
         && mkdir build.vistle \
         && cd build.vistle \
-        && cmake -GNinja -DVISTLE_CPU_ARCH=corei7 -DCMAKE_INSTALL_PREFIX=$PREFIX -DICET_USE_OPENGL=OFF -DENABLE_INSTALLER=FALSE -DCMAKE_BUILD_TYPE=Release .. \
+        && cmake -GNinja -DVISTLE_CPU_ARCH=corei7 -DCMAKE_INSTALL_PREFIX=$PREFIX -DICET_USE_OPENGL=OFF -DENABLE_INSTALLER=FALSE -DCMAKE_BUILD_TYPE=Release -DVISTLE_MULTI_PROCESS=OFF .. \
         && cmake --build . --target install
 
     . /etc/cleanup.sh
