@@ -38,6 +38,8 @@ From: centos:latest
     yum install -y mpich-3.2-devel
     echo "export MPIROOT=/usr/lib64/mpich-3.2" > /etc/mpi.sh
     echo "export PATH=\$MPIROOT/bin:\$PATH" >> /etc/mpi.sh
+    echo "export LD_LIBRARY_PATH=\$MPIROOT/lib:\$LD_LIBRARY_PATH" >> /etc/mpi.sh
+
 
     echo ". /etc/env.sh" >> /etc/buildenv.sh
     #yum install -y gcc gcc-c++
