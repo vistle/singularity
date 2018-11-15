@@ -21,8 +21,10 @@ Using
 * running Vistle
     ``singularity run --nv vistle.sif``
 
-If you do not the proprietory NVidia driver, you should omit ``--nv`` from the command lines.
+If you do not use the proprietary NVidia driver, you should omit ``--nv`` from the command lines.
 In all three cases, you can append files to be opened, to the command line.
+Alternatively, you can just execute the containers directly, e.g.  ``./vistle.sif``.
+Editing your ``run-singularity`` script will allow to change default parameters.
 
 
 [singularity]: https://www.sylabs.io/singularity/
