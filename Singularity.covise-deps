@@ -18,9 +18,18 @@ From: centos7.sif
 
     export PREFIX=/usr
 
-    mkdir -p /build && cd /build
-    git clone --recursive git://git.ffmpeg.org/ffmpeg.git -b release/4.0
-    cd ffmpeg && mkdir -p build && cd build \
+    ver=1_68_0
+    mkdir -p /build && cd /build \
+        && wget https://dl.bintray.com/boostorg/release/1.68.0/source/boost_$ver.tar.gz \
+        && tar xf boost_$ver.tar.gz \
+        && cd boost_$ver \
+        && ./bootstrap.sh --prefix=/usr --libdir=/usr/lib64 --without-libraries=python,mpi \
+        && ./b2 cxxstd=11 threading=multi variant=release link=shared -j $(getconf _NPROCESSORS_ONLN) install \
+        && cd / && rm -rf /build/boost_$ver /build/boost_$ver.tar.gz
+
+    mkdir -p /build && cd /build \
+        && git clone --recursive git://git.ffmpeg.org/ffmpeg.git -b release/4.0 \
+        && cd ffmpeg && mkdir -p build && cd build \
         && ../configure --enable-shared --prefix=$PREFIX --libdir=$PREFIX/lib64 \
         && make -j $(getconf _NPROCESSORS_ONLN) install \
         && cd / && rm -rf /build/ffmpeg
