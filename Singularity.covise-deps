@@ -9,26 +9,51 @@ From: centos7.sif
 
 
 %files
-    osg-find-coin.diff /tmp/osg-find-coin.diff
+    osg-find-coin.diff /osg-find-coin.diff
+    embree-usr-symlink-v2.17.x.diff /embree-usr-symlink.diff
 
 %post
     . /etc/buildenv.sh
 
-    yum install -y nasm
-
     export PREFIX=/usr
 
-    ver=1_68_0
+    ISPCVER=1.12.0
+    # install ispc - prerequisite for embree
+    cd / \
+        && wget -q http://sourceforge.net/projects/ispcmirror/files/v${ISPCVER}/ispc-v${ISPCVER}-linux.tar.gz/download \
+        && tar -C /usr/bin -x -f /download --strip-components=2 ispc-v${ISPCVER}-linux/bin/ispc \
+        && rm -f download
+
+    # Embree 3
     mkdir -p /build && cd /build \
-        && wget https://dl.bintray.com/boostorg/release/1.68.0/source/boost_$ver.tar.gz \
-        && tar xf boost_$ver.tar.gz \
-        && cd boost_$ver \
-        && ./bootstrap.sh --prefix=/usr --libdir=/usr/lib64 --without-libraries=python,mpi \
-        && ./b2 cxxstd=11 threading=multi variant=release link=shared -j $(getconf _NPROCESSORS_ONLN) install \
-        && cd / && rm -rf /build/boost_$ver /build/boost_$ver.tar.gz
+        && git clone git://github.com/embree/embree.git \
+        && cd embree \
+        && git checkout origin/master \
+        && cat < /embree-usr-symlink.diff \
+        && patch -p1 -E < /embree-usr-symlink.diff \
+        && rm /embree-usr-symlink.diff \
+        && mkdir -p build \
+        && cd build && cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PREFIX -DEMBREE_TUTORIALS=OFF .. \
+        && cmake --build . --target install \
+        && cd / && rm -rf /build/embree
 
     mkdir -p /build && cd /build \
-        && git clone --recursive git://git.ffmpeg.org/ffmpeg.git -b release/4.0 \
+        && git clone https://github.com/lz4/lz4.git \
+        && cd lz4 \
+        && make -j $(getconf _NPROCESSORS_ONLN) install PREFIX=$PREFIX LIBDIR=$PREFIX/lib64 \
+        && cd / && rm -rf /build/lz4
+
+#    ver=1_68_0
+#    mkdir -p /build && cd /build \
+#        && wget https://dl.bintray.com/boostorg/release/1.68.0/source/boost_$ver.tar.gz \
+#        && tar xf boost_$ver.tar.gz \
+#        && cd boost_$ver \
+#        && ./bootstrap.sh --prefix=/usr --libdir=/usr/lib64 --without-libraries=python,mpi \
+#        && ./b2 cxxstd=11 threading=multi variant=release link=shared -j $(getconf _NPROCESSORS_ONLN) install \
+#        && cd / && rm -rf /build/boost_$ver /build/boost_$ver.tar.gz
+
+    mkdir -p /build && cd /build \
+        && git clone --recursive git://git.ffmpeg.org/ffmpeg.git -b release/4.2 \
         && cd ffmpeg && mkdir -p build && cd build \
         && ../configure --enable-shared --prefix=$PREFIX --libdir=$PREFIX/lib64 \
         && make -j $(getconf _NPROCESSORS_ONLN) install \
@@ -42,22 +67,22 @@ From: centos7.sif
         && cd / && rm -rf /build/vrpn
 
     mkdir -p /build && cd /build \
+       && git clone --recursive git://github.com/openscenegraph/osg.git -b OpenSceneGraph-3.6 \
+       && cd osg && mkdir -p build \
+       && git apply /osg-find-coin.diff \
+       && rm /osg-find-coin.diff \
+       && cd build \
+       && cmake .. -DCMAKE_INSTALL_PREFIX=$PREFIX -DLIB_POSTFIX=64 -G Ninja \
+       && cmake --build . --target install \
+       && cd / && rm -rf /build/osg
+
+    mkdir -p /build && cd /build \
        && git clone --recursive https://github.com/Kitware/VTK.git -b release \
        && cd VTK && mkdir -p build \
        && cd build \
-       && cmake .. -DCMAKE_INSTALL_PREFIX=$PREFIX -G Ninja \
+       && cmake .. -DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=BOOL:FALSE -G Ninja \
        && cmake --build . --target install \
        && cd / && rm -rf /build/VTK
-
-    mkdir -p /build && cd /build \
-       && git clone --recursive git://github.com/openscenegraph/osg.git -b OpenSceneGraph-3.6 \
-       && cd osg && mkdir -p build \
-       && git apply /tmp/osg-find-coin.diff \
-       && rm /tmp/osg-find-coin.diff \
-       && cd build \
-       && cmake .. -DCMAKE_INSTALL_PREFIX=$PREFIX -G Ninja \
-       && cmake --build . --target install \
-       && cd / && rm -rf /build/osg
 
     . /etc/cleanup.sh
 
@@ -65,4 +90,3 @@ From: centos7.sif
 
 %environment
     . /etc/buildenv.sh
-

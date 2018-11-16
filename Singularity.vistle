@@ -1,5 +1,5 @@
 BootStrap: localimage
-From: vistle-deps.sif
+From: covise.sif
 
 %labels
     MAINTAINER "Martin Aumüller" <aumueller@hlrs.de>
@@ -7,9 +7,6 @@ From: vistle-deps.sif
 %runscript
     /usr/bin/vistle "$@"
 
-
-%files
-    singularity.sh  /usr/bin/singularity
 
 %post
     . /etc/buildenv.sh
@@ -20,7 +17,7 @@ From: vistle-deps.sif
         && cd /build/vistle \
         && mkdir build.vistle \
         && cd build.vistle \
-        && cmake -GNinja -DVISTLE_CPU_ARCH=corei7 -DCMAKE_INSTALL_PREFIX=$PREFIX -DICET_USE_OPENGL=OFF -DENABLE_INSTALLER=FALSE -DCMAKE_BUILD_TYPE=Release -DVISTLE_MULTI_PROCESS=OFF .. \
+        && cmake -GNinja -DVISTLE_CPU_ARCH=corei7 -DCMAKE_INSTALL_PREFIX=$PREFIX -DICET_USE_OPENGL=OFF -DENABLE_INSTALLER=FALSE -DCMAKE_BUILD_TYPE=${BUILDTYPE} -DVISTLE_MULTI_PROCESS=OFF .. \
         && cmake --build . --target install
 
     . /etc/cleanup.sh

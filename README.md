@@ -30,5 +30,5 @@ Editing your ``run-singularity`` script will allow to change default parameters.
 [singularity]: https://www.sylabs.io/singularity/
 [covise]:      https://www.hlrs.de/covise
 [cover]:       https://www.hlrs.de/opencover
-[vistle]:      https://www.hlrs.de/vistle
+[vistle]:      https://vistle.io
 [centos]:      https://www.centos.org

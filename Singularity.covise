@@ -18,7 +18,7 @@ From: covise-deps.sif
        && export COVISEDESTDIR=/build/covise \
        && mkdir -p build.covise \
        && cd build.covise \
-       && cmake -GNinja .. -DCOVISE_BUILD_RENDERER=OFF -DCOVISE_USE_VISIONARAY=OFF -DCMAKE_INSTALL_PREFIX=$PREFIX -DCMAKE_BUILD_TYPE=Release \
+       && cmake -GNinja .. -DCOVISE_BUILD_RENDERER=OFF -DCOVISE_USE_VISIONARAY=OFF -DCMAKE_INSTALL_PREFIX=$PREFIX -DCMAKE_BUILD_TYPE=${BUILDTYPE} \
        && cmake --build . --target install
 
     echo "export ARCHSUFFIX=${ARCHSUFFIX}" >> /etc/env.sh
