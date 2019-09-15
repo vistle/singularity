@@ -5,7 +5,7 @@ From: covise.sif
     MAINTAINER "Martin Aumüller" <aumueller@hlrs.de>
 
 %runscript
-    /usr/bin/vistle "$@"
+    /usr/bin/vistle_manager "$@"
 
 
 %post
