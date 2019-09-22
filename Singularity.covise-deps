@@ -17,6 +17,15 @@ From: centos7.sif
 
     export PREFIX=/usr
 
+    mkdir -p /build && cd /build \
+        && git clone git://github.com/intel/tbb.git \
+        && cd tbb \
+        && git checkout origin/tbb_2019 \
+        && make -j $(getconf _NPROCESSORS_ONLN) \
+        && cp -R include/tbb /usr/include \
+        && cp -a build/linux_intel64_*_release/*.so* /usr/lib64 \
+        && cd / && rm -rf /build/tbb
+
     ISPCVER=1.12.0
     # install ispc - prerequisite for embree
     cd / \
@@ -33,7 +42,7 @@ From: centos7.sif
         && patch -p1 -E < /embree-usr-symlink.diff \
         && rm /embree-usr-symlink.diff \
         && mkdir -p build \
-        && cd build && PATH=/usr/bin cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PREFIX -DEMBREE_TUTORIALS=OFF .. && cmake --build . --target install \
+        && cd build && cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PREFIX -DEMBREE_TUTORIALS=OFF .. && cmake --build . --target install \
         && cd / && rm -rf /build/embree
 
     mkdir -p /build && cd /build \

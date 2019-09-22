@@ -22,12 +22,12 @@ From: centos:7
 
     #yum install -y xorg-x11-drv-nvidia
 
-    yum install -y git ninja-build make gcc gcc-c++
+    yum install -y git ninja-build make # gcc gcc-c++
     yum install -y python36-devel python36-pip && ln -sf python36 /usr/bin/python3 && ln -sf pip36 /usr/bin/pip3
     yum install -y qt5-qttools-devel qt5-qtlocation-devel qt5-qtdeclarative-devel qt5-qtbase-devel qt5-qtconfiguration-devel qt5-qtxmlpatterns-devel qt5-qtsvg-devel qt5-qtx11extras-devel qt5-qtscript-devel qt5-qtserialport-devel qt5-qtaccountsservice-devel qt5-qtconnectivity-devel qt5-qtsensors-devel qt5-qtmultimedia-devel qt5-qttools-static
     yum install -y qt5-qtwebkit-devel
     yum install -y zlib-devel libpng-devel libtiff-devel xerces-c-devel libicu-devel
-    yum install -y libvncserver-devel tbb-devel snappy-devel libjpeg-turbo-devel turbojpeg-devel glew-devel readline-devel libcurl-devel hidapi-devel libmicrohttpd-devel
+    yum install -y libvncserver-devel snappy-devel libjpeg-turbo-devel turbojpeg-devel glew-devel readline-devel libcurl-devel hidapi-devel libmicrohttpd-devel # tbb-devel 
     yum install -y swig flex bison
     yum install -y gdal-devel proj-devel cgnslib-devel hdf5-devel assimp-devel libgeotiff-devel Coin3-devel libxml2-devel
     #yum install -y pcl-devel  
