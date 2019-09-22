@@ -14,6 +14,7 @@ From: centos:7
 
 
 %post
+    dt=8 # devtoolset-8
     yum install -y https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
     #yum install -y https://developer.download.nvidia.com/compute/cuda/repos/rhel7/x86_64/cuda-repo-rhel7-10.0.130-1.x86_64.rpm
     yum install -y centos-release-scl
@@ -21,9 +22,10 @@ From: centos:7
 
     #yum install -y xorg-x11-drv-nvidia
 
-    yum install -y git ninja-build make # gcc gcc-c++
-    yum install -y python36-devel python36-pip && ln -sf python36 /usr/bin/python3
+    yum install -y git ninja-build make gcc gcc-c++
+    yum install -y python36-devel python36-pip && ln -sf python36 /usr/bin/python3 && ln -sf pip36 /usr/bin/pip3
     yum install -y qt5-qttools-devel qt5-qtlocation-devel qt5-qtdeclarative-devel qt5-qtbase-devel qt5-qtconfiguration-devel qt5-qtxmlpatterns-devel qt5-qtsvg-devel qt5-qtx11extras-devel qt5-qtscript-devel qt5-qtserialport-devel qt5-qtaccountsservice-devel qt5-qtconnectivity-devel qt5-qtsensors-devel qt5-qtmultimedia-devel qt5-qttools-static
+    yum install -y qt5-qtwebkit-devel
     yum install -y zlib-devel libpng-devel libtiff-devel xerces-c-devel libicu-devel
     yum install -y libvncserver-devel tbb-devel snappy-devel libjpeg-turbo-devel turbojpeg-devel glew-devel readline-devel libcurl-devel hidapi-devel libmicrohttpd-devel
     yum install -y swig flex bison
@@ -49,11 +51,9 @@ From: centos:7
 
     echo ". /etc/env.sh" >> /etc/buildenv.sh
     #yum install -y gcc gcc-c++
-    #yum install -y devtoolset-7-toolchain devtoolset-7-binutils devtoolset-7-libstdc++-devel devtoolset-7-gcc-c++ devtoolset-7-runtime devtoolset-7-gcc
-    #echo ". /opt/rh/devtoolset-7/enable" > /etc/buildenv.sh
-    yum install -y devtoolset-4-toolchain devtoolset-4-binutils devtoolset-4-libstdc++-devel devtoolset-4-gcc-c++ devtoolset-4-runtime devtoolset-4-gcc
-    [ "${BUILDTYPE}" != "Release" ] && yum install -y devtoolset-4-valgrind devtoolset-4-gdb strace
-    echo ". /opt/rh/devtoolset-4/enable" >> /etc/buildenv.sh
+    yum install -y devtoolset-$dt-toolchain devtoolset-$dt-binutils devtoolset-$dt-libstdc++-devel devtoolset-$dt-gcc-c++ devtoolset-$dt-runtime devtoolset-$dt-gcc
+    [ "${BUILDTYPE}" != "Release" ] && yum install -y devtoolset-$dt-valgrind devtoolset-$dt-gdb strace
+    echo ". /opt/rh/devtoolset-$dt/enable" >> /etc/buildenv.sh
 
     echo "unset PATH" > /etc/env.sh
     echo "unset LD_LIBRARY_PATH" > /etc/env.sh
