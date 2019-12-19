@@ -22,7 +22,7 @@ From: covise.sif
 %environment
     . /etc/env.sh
 %runscript
-    /usr/bin/vistle_manager "$@"
+    /usr/bin/vistle_manager --gateway="${KEYHOLE_EXTERNAL_IP}" --port="${KEYHOLE_PORT0}" --dataport="${KEYHOLE_PORT1}" "$@"
 
 %appenv vistle
     . /etc/env.sh

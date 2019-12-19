@@ -1,7 +1,7 @@
 #FLAGS=--sandbox
 
 BUILDTYPE=Release
-SUFFIX=-opt
+SUFFIX=
 ifneq ($(debug),)
 BUILDTYPE="Debug"
 SUFFIX=-dbg
