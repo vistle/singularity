@@ -14,9 +14,11 @@ endif
 	singularity build  -f -F $(FLAGS) $@ $<
 
 
-all: vistle$(SUFFIX).sif
+all: vistle-server$(SUFFIX).sif vistle-client$(SUFFIX).sif
 
-vistle$(SUFFIX).sif: covise.sif
+vistle-client$(SUFFIX).sif: covise.sif
+
+vistle-server$(SUFFIX).sif: covise.sif
 
 covise.sif: covise-deps.sif
 
