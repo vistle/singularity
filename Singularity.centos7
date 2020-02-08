@@ -42,6 +42,7 @@ From: centos:7
     yum install -y nasm
     yum install -y patch
     yum install -y libzstd-devel tinyxml2-devel
+    yum install -y botan-devel
 
     yum install -y mpich-3.2-devel
     echo "export MPIROOT=/usr/lib64/mpich-3.2" > /etc/mpi.sh
