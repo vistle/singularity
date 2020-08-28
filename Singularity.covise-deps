@@ -13,6 +13,9 @@ From: centos7.sif
     embree-usr-symlink-v2.17.x.diff /embree-usr-symlink.diff
 
 %post
+    ISPCVER=1.14.0
+    VTKVER=8.2.0
+
     . /etc/buildenv.sh
 
     export PREFIX=/usr
@@ -26,7 +29,6 @@ From: centos7.sif
         && cp -a build/linux_intel64_*_release/*.so* /usr/lib64 \
         && cd / && rm -rf /build/tbb
 
-    ISPCVER=1.14.0
     ISPCTAR=ispc-v${ISPCVER}-linux.tar.gz
     # install ispc - prerequisite for embree
     cd / \
@@ -86,7 +88,7 @@ From: centos7.sif
        && cd / && rm -rf /build/osg
 
     mkdir -p /build && cd /build \
-       && git clone --recursive https://github.com/Kitware/VTK.git -b release \
+       && git clone --recursive https://github.com/Kitware/VTK.git -b v${VTKVER} \
        && cd VTK && mkdir -p build \
        && cd build \
        && cmake .. -DCMAKE_INSTALL_PREFIX=$PREFIX -DBUILD_TESTING=BOOL:FALSE -G Ninja \
