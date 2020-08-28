@@ -26,12 +26,13 @@ From: centos7.sif
         && cp -a build/linux_intel64_*_release/*.so* /usr/lib64 \
         && cd / && rm -rf /build/tbb
 
-    ISPCVER=1.12.0
+    ISPCVER=1.14.0
+    ISPCTAR=ispc-v${ISPCVER}-linux.tar.gz
     # install ispc - prerequisite for embree
     cd / \
-        && wget -q http://sourceforge.net/projects/ispcmirror/files/v${ISPCVER}/ispc-v${ISPCVER}-linux.tar.gz/download \
-        && tar -C /usr/bin -x -f /download --strip-components=2 ispc-v${ISPCVER}-linux/bin/ispc \
-        && rm -f download
+        && wget -q https://github.com/ispc/ispc/releases/download/$ISPCTAR \
+        && tar -C /usr/bin -x -f $ISPCTAR --strip-components=2 ispc-v${ISPCVER}-linux/bin/ispc \
+        && rm -f $ISPCTAR
 
     # Embree 3, compiled with GCC 4.8
     mkdir -p /build && cd /build \
