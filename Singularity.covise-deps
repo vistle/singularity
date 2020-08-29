@@ -13,7 +13,7 @@ From: centos7.sif
     embree-usr-symlink-v2.17.x.diff /embree-usr-symlink.diff
 
 %post
-    ISPCVER=1.14.0
+    ISPCVER=1.14.1
     VTKVER=8.2.0
 
     . /etc/buildenv.sh
@@ -32,7 +32,7 @@ From: centos7.sif
     ISPCTAR=ispc-v${ISPCVER}-linux.tar.gz
     # install ispc - prerequisite for embree
     cd / \
-        && wget -q https://github.com/ispc/ispc/releases/download/$ISPCTAR \
+        && wget https://github.com/ispc/ispc/releases/download/v${ISPCVER}/$ISPCTAR \
         && tar -C /usr/bin -x -f $ISPCTAR --strip-components=2 ispc-v${ISPCVER}-linux/bin/ispc \
         && rm -f $ISPCTAR
 
