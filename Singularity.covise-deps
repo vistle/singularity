@@ -29,6 +29,43 @@ From: centos7.sif
         && cp -a build/linux_intel64_*_release/*.so* /usr/lib64 \
         && cd / && rm -rf /build/tbb
 
+    mkdir -p /build && cd /build \
+        && git clone https://github.com/lz4/lz4.git \
+        && cd lz4 \
+        && make -j $(getconf _NPROCESSORS_ONLN) install PREFIX=$PREFIX LIBDIR=$PREFIX/lib64 \
+        && cd / && rm -rf /build/lz4
+
+    mkdir -p /build && cd /build \
+        && git clone https://github.com/Unidata/netcdf-c.git -b v4.6.3 \
+        && cd netcdf-c \
+        && ./configure --prefix=/usr --libdir=/usr/lib64 \
+        && make -j $(getconf _NPROCESSORS_ONLN) install \
+        && cd / && rm -rf /build/netcdf-c
+
+    mkdir -p /build && cd /build \
+        && git clone https://github.com/Unidata/netcdf-cxx4.git -b v4.3.1 \
+        && cd netcdf-cxx4 \
+        && ./configure --prefix=/usr --libdir=/usr/lib64 \
+        && make -j $(getconf _NPROCESSORS_ONLN) install \
+        && cd / && rm -rf /build/netcdf-cxx4
+
+    cd / \
+         && wget https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-cxx-4.2.tar.gz \
+         && tar -C /build -x -f netcdf-cxx-4.2.tar.gz \
+         && cd /build/netcdf-cxx-4.2 \
+         && ./configure --prefix=/usr --libdir=/usr/lib64 \
+         && make -j $(getconf _NPROCESSORS_ONLN) install \
+         && cd / && rm -rf /build/netcdf-cxx-4.2
+
+#    ver=1_68_0
+#    mkdir -p /build && cd /build \
+#        && wget https://dl.bintray.com/boostorg/release/1.68.0/source/boost_$ver.tar.gz \
+#        && tar xf boost_$ver.tar.gz \
+#        && cd boost_$ver \
+#        && ./bootstrap.sh --prefix=/usr --libdir=/usr/lib64 --without-libraries=python,mpi \
+#        && ./b2 cxxstd=11 threading=multi variant=release link=shared -j $(getconf _NPROCESSORS_ONLN) install \
+#        && cd / && rm -rf /build/boost_$ver /build/boost_$ver.tar.gz
+
     ISPCTAR=ispc-v${ISPCVER}-linux.tar.gz
     # install ispc - prerequisite for embree
     cd / \
@@ -47,21 +84,6 @@ From: centos7.sif
         && mkdir -p build \
         && cd build && cmake -GNinja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$PREFIX -DEMBREE_TUTORIALS=OFF .. && cmake --build . --target install \
         && cd / && rm -rf /build/embree
-
-    mkdir -p /build && cd /build \
-        && git clone https://github.com/lz4/lz4.git \
-        && cd lz4 \
-        && make -j $(getconf _NPROCESSORS_ONLN) install PREFIX=$PREFIX LIBDIR=$PREFIX/lib64 \
-        && cd / && rm -rf /build/lz4
-
-#    ver=1_68_0
-#    mkdir -p /build && cd /build \
-#        && wget https://dl.bintray.com/boostorg/release/1.68.0/source/boost_$ver.tar.gz \
-#        && tar xf boost_$ver.tar.gz \
-#        && cd boost_$ver \
-#        && ./bootstrap.sh --prefix=/usr --libdir=/usr/lib64 --without-libraries=python,mpi \
-#        && ./b2 cxxstd=11 threading=multi variant=release link=shared -j $(getconf _NPROCESSORS_ONLN) install \
-#        && cd / && rm -rf /build/boost_$ver /build/boost_$ver.tar.gz
 
     mkdir -p /build && cd /build \
         && git clone --recursive git://git.ffmpeg.org/ffmpeg.git -b release/4.2 \
