@@ -14,7 +14,7 @@ From: centos7.sif
 
 %post
     ISPCVER=1.14.1
-    VTKVER=8.2.0
+    VTKVER=9.0.1
 
     . /etc/buildenv.sh
 
